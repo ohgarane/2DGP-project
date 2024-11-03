@@ -10,6 +10,15 @@ from wallnut import Wallnut
 from zombie import Zombie
 
 
+pygame.init()
+
+backgdsize = (1000, 600)
+screen = pygame.display.set_mode(backgdsize)
+pygame.display.set_caption("plant vs zombie")
+
+bg_img = pygame.image.load('resources/screen/background.jpg').convert_alpha()
+
+
 def main():
 
         # 총알과 좀비의 충돌 처리
@@ -33,6 +42,14 @@ def main():
         # 피셔터에서 총알 생성
 
         # 일반 좀비 생성
+        while True:
+            screen.blit(bg_img, (0, 0))  # Draw the background image
+            pygame.display.update()  # Update the display
+
+            for event in pygame.event.get():
+                if event.type == pygame.QUIT:
+                    pygame.quit()
+                    exit()
         pass
 if __name__ == '__main__':
     main()
