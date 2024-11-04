@@ -1,55 +1,59 @@
-import time
 import pygame
+import random
 
-from bullet import Bullet
-from flagzombie import Flagzombie
-from peashooter import Peashooter
-from sun import Sun
-from sunflower import Sunflower
-from wallnut import Wallnut
-from zombie import Zombie
+# 필요한 클래스들 (예시로 Zombie만 추가)
+class Zombie(pygame.sprite.Sprite):
+    def __init__(self):
+        super().__init__()
+        self.image = pygame.image.load('resources/zombie/Zombie_0.png').convert_alpha()  # 좀비 이미지
+        self.rect = self.image.get_rect()
+        self.rect.x = 1000  # 화면 오른쪽 끝에서 시작
+        self.rect.y = random.randint(90, 540)  # y좌표는 랜덤으로 설정 (게임판에 적당히 맞게)
+        self.speed = 2  # 좀비 이동 속도
 
+    def update(self):
+        self.rect.x -= self.speed  # 왼쪽으로 이동
+        if self.rect.x < 0:  # 화면 왼쪽 끝에 도달하면 삭제
+            self.kill()
 
+# 초기화
 pygame.init()
-
 backgdsize = (1000, 600)
 screen = pygame.display.set_mode(backgdsize)
-pygame.display.set_caption("plant vs zombie")
+pygame.display.set_caption("Plant vs Zombie")
 
-bg_img = pygame.image.load('resources/screen/background.jpg').convert_alpha()
+# 그룹 생성
+zombieGroup = pygame.sprite.Group()
 
+# 타이머 이벤트 설정 (좀비 생성)
+GEN_ZOMBIE_EVENT = pygame.USEREVENT + 1
+pygame.time.set_timer(GEN_ZOMBIE_EVENT, 3000)  # 3초마다 좀비 생성
+
+clock = pygame.time.Clock()
 
 def main():
+    global zombieGroup
 
-        # 총알과 좀비의 충돌 처리
+    while True:
+        clock.tick(20)  # FPS 설정 (20으로 설정)
 
-        # 벽돌과 좀비의 충돌 처리
+        screen.fill((255, 255, 255))  # 배경색을 흰색으로 설정
 
-        # 피셔터와 좀비의 충돌 처리
+        # 좀비 그룹 업데이트 및 그리기
+        zombieGroup.update()
+        zombieGroup.draw(screen)
 
-        # 해바라기와 좀비의 충돌 처리
+        # 이벤트 처리
+        for event in pygame.event.get():
+            if event.type == pygame.QUIT:
+                exit()
 
-        # 화면에 배경과 UI 표시
+            if event.type == GEN_ZOMBIE_EVENT:
+                # 좀비 생성
+                zombie = Zombie()
+                zombieGroup.add(zombie)
 
-        # 씨앗 카드 이미지 표시
+        pygame.display.update()
 
-        # 각 스프라이트 업데이트 및 화면에 그리기
-
-        # 마우스 클릭으로 선택된 씨앗 표시
-
-        # 해바라기에서 태양 생성
-
-        # 피셔터에서 총알 생성
-
-        # 일반 좀비 생성
-        while True:
-            screen.blit(bg_img, (0, 0))  # Draw the background image
-            pygame.display.update()  # Update the display
-
-            for event in pygame.event.get():
-                if event.type == pygame.QUIT:
-                    pygame.quit()
-                    exit()
-        pass
 if __name__ == '__main__':
     main()
