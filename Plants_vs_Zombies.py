@@ -2,6 +2,13 @@ import pygame
 import random
 import time
 
+from peashooter import Peashooter
+from sun import Sun
+from sunflower import Sunflower
+from wallnut import Wallnut
+from bullet import Bullet
+from zombie import Zombie
+
 # 초기화
 pygame.init()
 backgdsize = (1000, 600)
@@ -12,6 +19,7 @@ pygame.display.set_caption("Plant vs Zombie")
 bg_img = pygame.image.load('resources/screen/background.jpg').convert_alpha()
 sunflowerImg = pygame.image.load('resources/sunflower/SunFlower_00.png').convert_alpha()
 peashooterImg = pygame.image.load('resources/peashooter/Peashooter_00.png').convert_alpha()
+wallnutImg = pygame.image.load('resources/wall_nut/Wallnut_00.png').convert_alpha()
 
 # Sun 클래스
 class Sun(pygame.sprite.Sprite):
@@ -86,6 +94,8 @@ peashooterGroup = pygame.sprite.Group()
 bulletGroup = pygame.sprite.Group()
 zombieGroup = pygame.sprite.Group()
 sunGroup = pygame.sprite.Group()
+wallnutGroup = pygame.sprite.Group()
+
 
 # 이벤트 타이머
 GEN_SUN_EVENT = pygame.USEREVENT + 1
@@ -138,6 +148,9 @@ def main():
 
         sunGroup.update()
         sunGroup.draw(screen)
+
+        wallnutGroup.update()
+        wallnutGroup.draw(screen)
 
         pygame.display.update()
 
