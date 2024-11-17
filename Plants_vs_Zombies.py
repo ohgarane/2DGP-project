@@ -1,164 +1,189 @@
-import pygame
-import random
 import time
+import pygame
 
+from bullet import Bullet
+from flagzombie import Flagzombie
 from peashooter import Peashooter
 from sun import Sun
 from sunflower import Sunflower
 from wallnut import Wallnut
-from bullet import Bullet
 from zombie import Zombie
 
-# 초기화
 pygame.init()
 backgdsize = (1000, 600)
 screen = pygame.display.set_mode(backgdsize)
-pygame.display.set_caption("Plant vs Zombie")
+pygame.display.set_caption("plant vs zombie")
 
-# 이미지 로드
-bg_img = pygame.image.load('resources/screen/background.jpg').convert_alpha()
-sunflowerImg = pygame.image.load('resources/sunflower/SunFlower_00.png').convert_alpha()
-peashooterImg = pygame.image.load('resources/peashooter/Peashooter_00.png').convert_alpha()
-wallnutImg = pygame.image.load('resources/wall_nut/Wallnut_00.png').convert_alpha()
+sunflowerImg = pygame.image.load('resources/images/sunflower/SunFlower_00.png').convert_alpha()
+peashooterImg = pygame.image.load('resources/images/peashooter/Peashooter_00.png').convert_alpha()
+wallnutImg = pygame.image.load('resources/images/wall_nut/WallNut_00.png').convert_alpha()
+flowerSeed = pygame.image.load('resources/images/cards/card_sunflower.png').convert_alpha()
+wallnutSeed = pygame.image.load('resources/images/cards/card_wallnut.png').convert_alpha()
+peashooterSeed = pygame.image.load('resources/images/cards/card_peashooter.png').convert_alpha()
+bg_img = pygame.image.load('resources/images/screen/background.jpg').convert_alpha()
+seedbank_img = pygame.image.load('resources/images/screen/SeedBank.png').convert_alpha()
 
-# Sun 클래스
-class Sun(pygame.sprite.Sprite):
-    def __init__(self, position):
-        super().__init__()
-        self.image = pygame.image.load('resources/sun/Sun_1.png').convert_alpha()
-        self.rect = self.image.get_rect()
-        self.rect.center = position
-        self.lasttime = time.time()
+text = 900
+sun_font = pygame.font.SysFont('arial', 25)
+sun_num_surface = sun_font.render(str(text), True, (0, 0, 0))
 
-    def update(self):
-        pass  # 햇살은 고정 위치에 남음
-
-# Sunflower 클래스
-class Sunflower(pygame.sprite.Sprite):
-    def __init__(self):
-        super().__init__()
-        self.image = sunflowerImg
-        self.rect = self.image.get_rect()
-        self.rect.x = 200  # 기본 위치
-        self.rect.y = 100
-        self.lasttime = time.time()
-
-    def update(self):
-        pass  # 동작 없음
-
-# Bullet 클래스
-class Bullet(pygame.sprite.Sprite):
-    def __init__(self, position):
-        super().__init__()
-        self.image = pygame.image.load('resources/bullet/Bullet_1.png').convert_alpha()
-        self.rect = self.image.get_rect()
-        self.rect.midleft = position
-        self.speed = 5
-
-    def update(self):
-        self.rect.x += self.speed
-        if self.rect.x > backgdsize[0]:  # 화면을 벗어나면 삭제
-            self.kill()
-
-# Peashooter 클래스
-class Peashooter(pygame.sprite.Sprite):
-    def __init__(self):
-        super().__init__()
-        self.image = peashooterImg
-        self.rect = self.image.get_rect()
-        self.rect.x = 300  # 기본 위치
-        self.rect.y = 200
-        self.lasttime = time.time()
-
-    def update(self):
-        pass  # 동작 없음
-
-# Zombie 클래스
-class Zombie(pygame.sprite.Sprite):
-    def __init__(self):
-        super().__init__()
-        self.image = pygame.image.load('resources/zombie/Zombie_0.png').convert_alpha()
-        self.rect = self.image.get_rect()
-        self.rect.x = backgdsize[0]  # 화면 오른쪽 끝에서 시작
-        self.rect.y = random.randint(100, 500)
-        self.speed = 2
-
-    def update(self):
-        self.rect.x -= self.speed
-        if self.rect.x < 0:  # 화면 왼쪽 끝에 도달하면 삭제
-            self.kill()
-
-# 그룹 설정
 sunFlowerGroup = pygame.sprite.Group()
 peashooterGroup = pygame.sprite.Group()
 bulletGroup = pygame.sprite.Group()
 zombieGroup = pygame.sprite.Group()
-sunGroup = pygame.sprite.Group()
 wallnutGroup = pygame.sprite.Group()
+sunGroup = pygame.sprite.Group()
 
-
-# 이벤트 타이머
 GEN_SUN_EVENT = pygame.USEREVENT + 1
-pygame.time.set_timer(GEN_SUN_EVENT, 5000)  # 5초마다 햇살 생성
+pygame.time.set_timer(GEN_SUN_EVENT, 1000)
 
 GEN_BULLET_EVENT = pygame.USEREVENT + 2
-pygame.time.set_timer(GEN_BULLET_EVENT, 1000)  # 1초마다 총알 생성
+pygame.time.set_timer(GEN_BULLET_EVENT, 1000)
 
 GEN_ZOMBIE_EVENT = pygame.USEREVENT + 3
-pygame.time.set_timer(GEN_ZOMBIE_EVENT, 3000)  # 3초마다 좀비 생성
+pygame.time.set_timer(GEN_ZOMBIE_EVENT, 3000)
 
-# 메인 루프
+GEN_FLAGZOMBIE_EVENT = pygame.USEREVENT + 4
+pygame.time.set_timer(GEN_FLAGZOMBIE_EVENT, 3000)
+
+choose = 0
+clock = pygame.time.Clock()
+
+
 def main():
-    clock = pygame.time.Clock()
+    global sun_num_surface, choose
+    global text
+    index = 0
     while True:
         clock.tick(20)
-        screen.blit(bg_img, (0, 0))  # 배경 그리기
+        index += 1
+        for bullet in bulletGroup:
+            for zombie in zombieGroup:
+                if pygame.sprite.collide_mask(bullet, zombie):
+                    zombie.energy -= 1
+                    bulletGroup.remove(bullet)
+        for wallNut in wallnutGroup:
+            for zombie in zombieGroup:
+                if pygame.sprite.collide_mask(wallNut, zombie):
+                    zombie.ismeetwallnut = True
+                    wallNut.zombies.add(zombie)
+        for peashooter in peashooterGroup:
+            for zombie in zombieGroup:
+                if pygame.sprite.collide_mask(peashooter, zombie):
+                    zombie.ismeetwallnut = True
+                    peashooter.zombies.add(zombie)
+        for sunflower in sunFlowerGroup:
+            for zombie in zombieGroup:
+                if pygame.sprite.collide_mask(sunflower, zombie):
+                    zombie.ismeetwallnut = True
+                    sunflower.zombies.add(zombie)
+        screen.blit(bg_img, (0, 0))
+        screen.blit(seedbank_img, (250, 0))
+        screen.blit(sun_num_surface, (270, 60))
 
-        # 이벤트 처리
+        screen.blit(flowerSeed, (320, 0))
+        screen.blit(peashooterSeed, (382, 0))
+        screen.blit(wallnutSeed, (446, 0))
+        sunFlowerGroup.update(index)
+        sunFlowerGroup.draw(screen)
+        peashooterGroup.update(index)
+        peashooterGroup.draw(screen)
+        bulletGroup.update(index)
+        bulletGroup.draw(screen)
+        zombieGroup.update(index)
+        zombieGroup.draw(screen)
+        wallnutGroup.update(index)
+        wallnutGroup.draw(screen)
+        sunGroup.update(index)
+        sunGroup.draw(screen)
+
+        (x, y) = pygame.mouse.get_pos()
+        if choose == 1:
+            screen.blit(sunflowerImg, (x, y))
+        elif choose == 2:
+            screen.blit(peashooterImg, (x, y))
+        elif choose == 3:
+            screen.blit(wallnutImg, (x, y))
         for event in pygame.event.get():
-            if event.type == pygame.QUIT:
-                exit()
-
             if event.type == GEN_SUN_EVENT:
-                for sunflower in sunFlowerGroup:
-                    sun = Sun(sunflower.rect.center)
-                    sunGroup.add(sun)
+                for sprite in sunFlowerGroup:
+                    now = time.time()
+                    if now - sprite.lasttime >= 5:
+                        sun = Sun(sprite.rect)
+                        sunGroup.add(sun)
+                        sprite.lasttime = now
 
             if event.type == GEN_BULLET_EVENT:
-                for peashooter in peashooterGroup:
-                    bullet = Bullet(peashooter.rect.midright)
+                for sprite in peashooterGroup:
+                    bullet = Bullet(sprite.rect, backgdsize)
                     bulletGroup.add(bullet)
 
             if event.type == GEN_ZOMBIE_EVENT:
                 zombie = Zombie()
                 zombieGroup.add(zombie)
 
-        # 그룹 업데이트 및 그리기
-        sunFlowerGroup.update()
-        sunFlowerGroup.draw(screen)
+            if event.type == GEN_FLAGZOMBIE_EVENT:
+                flagzombie = Flagzombie()
+                zombieGroup.add(flagzombie)
 
-        peashooterGroup.update()
-        peashooterGroup.draw(screen)
+            if event.type == pygame.QUIT:
+                exit()
 
-        bulletGroup.update()
-        bulletGroup.draw(screen)
+            if event.type == pygame.MOUSEBUTTONDOWN:
+                pressed_key = pygame.mouse.get_pressed()
+                if pressed_key[0] == 1:
+                    x, y = pygame.mouse.get_pos()
+                    print(x, y)
+                    if 320 <= x <= 382 and 0 <= y <= 89 and text >= 50:
 
-        zombieGroup.update()
-        zombieGroup.draw(screen)
+                        choose = 1
+                    elif 383 <= x < 446 and 0 <= y <= 89 and text >= 100:
 
-        sunGroup.update()
-        sunGroup.draw(screen)
+                        choose = 2
+                    elif 447 <= x < 511 and 0 <= y <= 89 and text >= 50:
 
-        wallnutGroup.update()
-        wallnutGroup.draw(screen)
+                        choose = 3
+                    elif 250 < x < 1200 and 90 < y < 600:
+                        if choose == 1:
+                            current_time = time.time()
+                            sunflower = Sunflower(current_time)
+                            sunflower.rect.x = x
+                            sunflower.rect.y = y
+                            sunFlowerGroup.add(sunflower)
+                            choose = 0
+
+                            text -= 50
+                            sun_font = pygame.font.SysFont('arial', 25)
+                            sun_num_surface = sun_font.render(str(text), True, (0, 0, 0))
+                        elif choose == 2:
+                            peashooter = Peashooter()
+                            peashooter.rect.y = y
+                            peashooter.rect.x = x
+                            peashooterGroup.add(peashooter)
+                            choose = 0
+
+                            text -= 100
+                            sun_font = pygame.font.SysFont('arial', 25)
+                            sun_num_surface = sun_font.render(str(text), True, (0, 0, 0))
+                        elif choose == 3:
+                            wallnut = Wallnut()
+                            wallnut.rect.y = y
+                            wallnut.rect.x = x
+                            wallnutGroup.add(wallnut)
+                            choose = 0
+
+                            text -= 50
+                            sun_font = pygame.font.SysFont('arial', 25)
+                            sun_num_surface = sun_font.render(str(text), True, (0, 0, 0))
+                    for sun in sunGroup:
+                        if sun.rect.collidepoint(x, y):
+                            sunGroup.remove(sun)
+                            text += 50
+                            sun_font = pygame.font.SysFont('arial', 25)
+                            sun_num_surface = sun_font.render(str(text), True, (0, 0, 0))
 
         pygame.display.update()
 
+
 if __name__ == '__main__':
-    sunflower = Sunflower()
-    sunFlowerGroup.add(sunflower)
-
-    peashooter = Peashooter()
-    peashooterGroup.add(peashooter)
-
     main()
