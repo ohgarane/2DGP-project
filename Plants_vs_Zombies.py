@@ -1,5 +1,6 @@
 import time
 import pygame
+import pico2d
 
 from bullet import Bullet
 from flagzombie import Flagzombie
@@ -49,10 +50,27 @@ pygame.time.set_timer(GEN_FLAGZOMBIE_EVENT, 3000)
 choose = 0
 clock = pygame.time.Clock()
 
+# 격자 관련 설정
+ROWS, COLS = 5, 9
+GRID_LEFT, GRID_TOP = 247, 90  # 격자의 시작점 (좌측 상단 좌표)
+GRID_RIGHT, GRID_BOTTOM = 964, 559  # 격자의 끝점 (우측 하단 좌표)
+CELL_WIDTH = (GRID_RIGHT - GRID_LEFT) / COLS
+CELL_HEIGHT = (GRID_BOTTOM - GRID_TOP) / ROWS
+
+def get_grid_center(x, y):
+    """
+    클릭된 좌표 (x, y)에 해당하는 격자 중심 좌표를 반환합니다.
+    """
+    col = int((x - GRID_LEFT) // CELL_WIDTH)
+    row = int((y - GRID_TOP) // CELL_HEIGHT)
+    if 0 <= col < COLS and 0 <= row < ROWS:
+        center_x = GRID_LEFT + col * CELL_WIDTH + CELL_WIDTH / 2
+        center_y = GRID_TOP + row * CELL_HEIGHT + CELL_HEIGHT / 2
+        return center_x, center_y
+    return None  # 격자 범위를 벗어난 경우
 
 def main():
-    global sun_num_surface, choose
-    global text
+    global sun_num_surface, choose, text
     index = 0
     while True:
         clock.tick(20)
@@ -131,59 +149,47 @@ def main():
 
             if event.type == pygame.MOUSEBUTTONDOWN:
                 pressed_key = pygame.mouse.get_pressed()
-                if pressed_key[0] == 1:
+                if pressed_key[0] == 1:  # 왼쪽 버튼 클릭
                     x, y = pygame.mouse.get_pos()
                     print(x, y)
                     if 320 <= x <= 382 and 0 <= y <= 89 and text >= 50:
-
                         choose = 1
                     elif 383 <= x < 446 and 0 <= y <= 89 and text >= 100:
-
                         choose = 2
                     elif 447 <= x < 511 and 0 <= y <= 89 and text >= 50:
-
                         choose = 3
-                    elif 250 < x < 1200 and 90 < y < 600:
-                        if choose == 1:
-                            current_time = time.time()
-                            sunflower = Sunflower(current_time)
-                            sunflower.rect.x = x
-                            sunflower.rect.y = y
-                            sunFlowerGroup.add(sunflower)
-                            choose = 0
-
-                            text -= 50
-                            sun_font = pygame.font.SysFont('arial', 25)
-                            sun_num_surface = sun_font.render(str(text), True, (0, 0, 0))
-                        elif choose == 2:
-                            peashooter = Peashooter()
-                            peashooter.rect.y = y
-                            peashooter.rect.x = x
-                            peashooterGroup.add(peashooter)
-                            choose = 0
-
-                            text -= 100
-                            sun_font = pygame.font.SysFont('arial', 25)
-                            sun_num_surface = sun_font.render(str(text), True, (0, 0, 0))
-                        elif choose == 3:
-                            wallnut = Wallnut()
-                            wallnut.rect.y = y
-                            wallnut.rect.x = x
-                            wallnutGroup.add(wallnut)
-                            choose = 0
-
-                            text -= 50
-                            sun_font = pygame.font.SysFont('arial', 25)
+                    elif GRID_LEFT <= x <= GRID_RIGHT and GRID_TOP <= y <= GRID_BOTTOM:
+                        # 격자 범위 안에서 클릭된 경우
+                        grid_center = get_grid_center(x, y)
+                        if grid_center:
+                            grid_x, grid_y = grid_center
+                            if choose == 1:
+                                current_time = time.time()
+                                sunflower = Sunflower(current_time)
+                                sunflower.rect.center = (grid_x, grid_y)
+                                sunFlowerGroup.add(sunflower)
+                                choose = 0
+                                text -= 50
+                            elif choose == 2:
+                                peashooter = Peashooter()
+                                peashooter.rect.center = (grid_x, grid_y)
+                                peashooterGroup.add(peashooter)
+                                choose = 0
+                                text -= 100
+                            elif choose == 3:
+                                wallnut = Wallnut()
+                                wallnut.rect.center = (grid_x, grid_y)
+                                wallnutGroup.add(wallnut)
+                                choose = 0
+                                text -= 50
                             sun_num_surface = sun_font.render(str(text), True, (0, 0, 0))
                     for sun in sunGroup:
                         if sun.rect.collidepoint(x, y):
                             sunGroup.remove(sun)
                             text += 50
-                            sun_font = pygame.font.SysFont('arial', 25)
                             sun_num_surface = sun_font.render(str(text), True, (0, 0, 0))
 
         pygame.display.update()
-
 
 if __name__ == '__main__':
     main()
