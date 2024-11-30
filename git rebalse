@@ -1,0 +1,114 @@
+[33mcommit 9a0ba06f7ce11c86bfbc79442882c848ae3073f0[m[33m ([m[1;36mHEAD[m[33m -> [m[1;32mmain[m[33m, [m[1;31morigin/main[m[33m, [m[1;31morigin/HEAD[m[33m)[m
+Author: ohgarane <ohgarane8@naver.com>
+Date:   Sun Dec 8 18:31:32 2024 +0900
+
+    리소스 수정
+    
+    최종 리소스 수정본
+
+[33mcommit 5073a07970d945b162c97f4dd0155bc0c928046d[m
+Author: ohgarane <ohgarane8@naver.com>
+Date:   Wed Nov 27 15:39:15 2024 +0900
+
+    리소스 추가
+    
+    배경음악 리소스 추가
+
+[33mcommit cee1c60a515ebd83591667c5766b655117b140fc[m
+Author: ohgarane <ohgarane8@naver.com>
+Date:   Wed Nov 27 15:37:00 2024 +0900
+
+    메인.py 코드 보강
+    
+    정원 그리드 내부에 알맞게 딱 떨어지도록 식물배치가 가능하게 구현
+
+[33mcommit 341a1a32068c625c7a5bfe75508874bc9f50d39f[m
+Author: ohgarane <ohgarane8@naver.com>
+Date:   Sun Nov 17 23:58:12 2024 +0900
+
+    flag zombie 구현 및 게임 플레이를 위한 main.py 수정
+    
+    flag zombie 구현 및 게임 플레이를 위한 main.py 수정
+
+[33mcommit d7313d205fc4ca33c80331a1637ae4e157548740[m
+Author: ohgarane <ohgarane8@naver.com>
+Date:   Sun Nov 10 18:26:10 2024 +0900
+
+    wallnut 추가 구현
+    
+    wallnut 클래스 추가 구현
+
+[33mcommit c4cc289b51c704d85d6f440baf815279f63c9a47[m
+Author: ohgarane <ohgarane8@naver.com>
+Date:   Fri Nov 8 22:42:20 2024 +0900
+
+    총알 식물 해, 해바라기 구현
+    
+    peashooter, bullet, sun, sunflower 구현
+
+[33mcommit 2309ce99a9b3885a10486c9b99c8e27516323b69[m
+Author: ohgarane <ohgarane8@naver.com>
+Date:   Mon Nov 4 23:51:22 2024 +0900
+
+    좀비 생성, 이동 구현
+    
+    좀비 생성 및 이동 구현
+    우에서 좌로
+
+[33mcommit 6c8b59882ac7e6740a03a1b5e2a9c47c5b50af3a[m
+Author: ohgarane <ohgarane8@naver.com>
+Date:   Sun Nov 3 15:10:11 2024 +0900
+
+    배경화면 정상 출력
+    
+    background jpg  출력
+
+[33mcommit 0341416173d4bde62e12a93e635f868ac241f0fd[m
+Author: ohgarane <ohgarane8@naver.com>
+Date:   Sat Nov 2 19:42:01 2024 +0900
+
+    전체적인 구조 설계
+    
+    전체적인 구조 설계
+
+[33mcommit ef751e7005826f43b1300f9bacdcacee8a6555a0[m
+Author: ohgarane <ohgarane8@naver.com>
+Date:   Sun Oct 27 21:01:07 2024 +0900
+
+    2차 리소스 확보
+    
+    flag zombie, wall, screen, cards 리소스 이미지 확보
+
+[33mcommit c280178a39935201a1a105d5470b84ce4d72ec5f[m
+Author: ohgarane <ohgarane8@naver.com>
+Date:   Sat Oct 26 23:31:56 2024 +0900
+
+    1차 리소스 확보
+    
+    zombie peashooter, bullet,sun, sun flower 리소스 이미지
+
+[33mcommit 3193d91401d963e84f045976dfc1f3f8d2548a15[m
+Author: ohgarane <ohgarane8@naver.com>
+Date:   Mon Nov 18 11:25:30 2024 +0900
+
+    Delete images directory
+
+[33mcommit e561a830fb09fbd045b5b2857981e254297fba0f[m
+Author: ohgarane <ohgarane8@naver.com>
+Date:   Mon Nov 18 11:21:59 2024 +0900
+
+    1차 이미지 리소스 확보
+    
+    bullet, peashooter, sun, sunflower, zombie 리소스
+
+[33mcommit 3d616127904bf12ec35c2d93092373968af4f99d[m
+Author: ohgarane <ohgarane8@naver.com>
+Date:   Mon Oct 14 10:39:15 2024 +0900
+
+    Add files via upload
+
+[33mcommit cdb24f786cc2025c9ef70249fa65ddc821104dbb[m
+Author: ohgarane <ohgarane8@naver.com>
+Date:   Sun Oct 13 15:53:25 2024 +0900
+
+    Add files via upload
