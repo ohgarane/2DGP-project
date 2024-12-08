@@ -17,9 +17,9 @@ class Zombie:
     WALK, ATTACK, DIE, END = 1, 2, 3, 4
 
     def __init__(self):
-        self.walk_images = [load_image(f"C:\\Users\\USER\\Desktop\\2DGP-project\\resources\\images\\zombie\\Zombie_{i}.png") for i in range(self.WALK_FRAMES)]
-        self.attack_images = [load_image(f"C:\\Users\\USER\\Desktop\\2DGP-project\\resources\\images\\zombie\\ZombieAttack_{i}.png") for i in range(self.ATTACK_FRAMES)]
-        self.die_images = [load_image(f"C:\\Users\\USER\\Desktop\\2DGP-project\\resources\\images\\zombie\\ZombieDie_{i}.png") for i in range(self.DIE_FRAMES)]
+        self.walk_images = [load_image(f"resource\\images\\zombie\\Zombie_{i}.png") for i in range(self.WALK_FRAMES)]
+        self.attack_images = [load_image(f"resource\\images\\zombie\\ZombieAttack_{i}.png") for i in range(self.ATTACK_FRAMES)]
+        self.die_images = [load_image(f"resource\\images\\zombie\\ZombieDie_{i}.png") for i in range(self.DIE_FRAMES)]
 
         self.x, self.y = 1400, (random.randint(0, 4) * 100) + 60
         self.speed, self.life = 0, 4

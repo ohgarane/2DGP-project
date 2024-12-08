@@ -51,10 +51,10 @@ class Item:
     def __init__(self):
         self.select_image = load_image('resource/select_plant.png')
         if self.set_plant_sound is None:
-            self.coin_sound = load_wav('resources/music/coin.wav')
+            self.coin_sound = load_wav('resource/coin.wav')
             self.coin_sound.set_volume(32)
         if self.set_plant_sound is None:
-            self.set_plant_sound = load_wav('resources/music/set_plant.wav')
+            self.set_plant_sound = load_wav('resource/set_plant.wav')
             self.set_plant_sound.set_volume(32)
 
     def update(self, frame_time):
@@ -74,9 +74,9 @@ class Game_End:
     def __init__(self):
         self.plant_image = load_image('resource/end_plant.jpg')
         self.zombie_image = load_image('resource/end_zombie.jpg')
-        self.play_bgm = load_music('resources/music/play.mp3')
-        self.plant_bgm = load_music('resources/music/end_plant.mp3')
-        self.zombie_bgm = load_music('resources/music/end_zombie.mp3')
+        self.play_bgm = load_music('resource/play.mp3')
+        self.plant_bgm = load_music('resource/end_plant.mp3')
+        self.zombie_bgm = load_music('resource/end_zombie.mp3')
         self.state = 'play'
         self.play()
 
