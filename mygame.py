@@ -1,4 +1,5 @@
 import platform
+import pico2d
 import os
 import game_framework
 import start_state
